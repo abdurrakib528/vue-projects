@@ -113,11 +113,8 @@ let calculator = Vue.createApp({
         async fetchCoinA() {
             this.loading = true;
             let ids = "BUSD,TUSD,USD,USDC,USDT";
-            let url = `https://api.nomics.com/v1/currencies/ticker?key=bd203c06a2629074324aa986b5922a46473ac557&ids=${ids}`;
-            await fetch(url, {
-                mode: "no-cors",
-                method: "GET",
-            })
+            let url = `https://api.nomics.com/v1/currencies/ticker?key=bd203c06a2629074324aa986b5922a46473ac557&ids=${ids}&interval=1d`;
+            await fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
                     this.currencyListsA = data;
@@ -183,13 +180,7 @@ let calculator = Vue.createApp({
                 "ZRX",
             ];
             let url = `https://api.nomics.com/v1/currencies/ticker?key=bd203c06a2629074324aa986b5922a46473ac557&ids=${ids}&interval=1d`;
-            await fetch(url, {
-                mode: "no-cors",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
+            await fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
                     this.currencyLists = data;
