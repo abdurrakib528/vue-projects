@@ -1,0 +1,398 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    font-size: 62.5%;
+}
+body {
+    font-family: "Nunito", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #000000;
+    max-width: 120rem;
+    width: 100%;
+    margin: auto;
+}
+.container {
+    width: 100%;
+}
+
+[v-cloak] {
+    display: none;
+}
+input {
+    font: inherit;
+    color: inherit;
+}
+img {
+    max-width: 100%;
+    display: block;
+    height: auto;
+}
+/* Chrome, Safari, Edge, Opera */
+.calculator-wrapper input::-webkit-outer-spin-button,
+.calculator-wrapper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.calculator-wrapper input[type="number"] {
+    -moz-appearance: textfield;
+}
+.calculator-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 5rem 0;
+    overflow: hidden;
+    min-height: 60vh;
+}
+.loader {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.calculator-inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    border-radius: 0.5rem;
+    background: #000000;
+    box-shadow: 0 0 0.5rem 0rem rgba(0, 0, 0, 0.1);
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+.calculator-inner > * {
+    flex: 1;
+    padding: 4rem;
+}
+
+.calculators figure img {
+    width: 2.5rem;
+}
+.input-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 4rem;
+}
+.input-controll {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 3rem;
+}
+
+.select-list li img {
+    max-width: 3rem;
+}
+
+.loan-amount {
+    position: relative;
+}
+/* 
+.loan-amount:after {
+    position: absolute;
+    left: 1rem;
+    top: 17px;
+    content: "$";
+    font-size: 1.6rem;
+    font-weight: 500;
+} */
+
+/* .loan-amount input {
+    padding-left: 2.3rem !important;
+} */
+.input-group span {
+    font-size: 1.2rem;
+    /* color: #fcc41c; */
+    color: rgb(228, 53, 53);
+    display: block;
+    margin-top: 1rem;
+}
+.loan-amount,
+.collateral-amount {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+.collateral-amount {
+    max-width: 40%;
+}
+.input-group .input-label {
+    font-weight: 500;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.input-group input {
+    border: 1px solid gray;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    outline: none;
+    height: 5rem;
+    background-color: gray;
+}
+.input-group input.input-error {
+    border-color: rgb(228, 53, 53);
+    /* color: rgb(228, 53, 53); */
+}
+.input-select {
+    width: 16rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid gray;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    height: 5rem;
+    gap: 2rem;
+    cursor: pointer;
+    position: relative;
+    background-color: gray;
+}
+.select-icon svg {
+    fill: #fff;
+}
+.select-option {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+.select-list {
+    position: absolute;
+    left: 0px;
+    top: 200%;
+    background-color: gray;
+    width: 100%;
+    height: max-content;
+    border-radius: 0.5rem;
+    z-index: 999;
+    box-shadow: 0px 0px 0.5rem rgba(0, 0, 0, 0.1);
+    max-height: 30rem;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+.select-list.visible {
+    opacity: 1;
+    visibility: visible;
+    top: calc(100% + 2px);
+}
+.select-list ul {
+    list-style: none;
+}
+
+.select-list li {
+    padding: 1rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.select-list li span {
+    color: #fff;
+    font-size: 1.6rem;
+}
+.select-list li img {
+    max-width: 2.5rem;
+    margin-right: 2rem;
+    margin-top: 0.5rem;
+}
+.select-list li:first-child {
+    margin: 0px;
+}
+
+.interests input {
+    position: absolute;
+    left: -9999px;
+}
+.interest {
+    position: relative;
+}
+
+.interests {
+    display: flex;
+    flex-direction: row;
+    background: gray;
+    padding: 3px;
+    border-radius: 30rem;
+    color: #fff;
+    width: max-content;
+}
+.interests.percentage {
+    font-size: 1.2rem;
+    background: transparent;
+    margin-top: 1rem;
+    text-align: center;
+    justify-content: space-between;
+}
+.percentage p {
+    text-align: center;
+    text-transform: uppercase;
+    width: 10rem;
+    color: gray;
+    font-weight: 400;
+}
+.interest label {
+    display: block;
+    width: 10rem;
+    text-align: center;
+    margin: 0;
+    margin-left: 1rem;
+    padding: 1rem;
+    border-radius: 30rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.interest input:checked + label {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background: #000000;
+    color: #fcc41c;
+}
+.interest:first-child label {
+    margin-left: 0px;
+}
+
+/* slider pips css=========== */
+.month-slider-range {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+.subtitle {
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+.month-range {
+    background: gray;
+    margin-left: 1rem;
+    padding: 2px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    border-radius: 50rem;
+    cursor: pointer;
+    width: 6rem;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.month-range label {
+    background: gray;
+    font-size: 1.4rem;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 30rem;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.month-range input {
+    position: absolute;
+    left: -99999px;
+}
+
+.month-range:first-child {
+    margin-left: 0px;
+}
+
+.month-range input:checked + label {
+    background: #000000;
+    color: #fcc41c;
+}
+
+/* Resutls ====/ */
+.calculator-results {
+    background: #710bc2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+.calculator-results h3 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+.calculator-results p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    line-height: 1.5;
+}
+span.total-loan {
+    font-size: 6rem;
+    font-weight: 700;
+}
+
+.resutls-interest {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 4rem;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+}
+
+.monthly-interest span {
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+.outside {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}
+
+@media screen and (max-width: 1000px) {
+    .calculator-inner {
+        flex-direction: column;
+    }
+}
+@media screen and (max-width: 768px) {
+    .calculator-inner > * {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+    .interests {
+        width: max-content;
+    }
+    .month-range label {
+        font-size: 1.2rem;
+    }
+
+    .month-range {
+        width: 5rem;
+    }
+}

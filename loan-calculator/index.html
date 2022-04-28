@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/png" sizes="32x32" href="./src/favicon-32x32.png" />
+        <title>Bitcoinz Calculator</title>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet" />
+
+        <link rel="stylesheet" href="./src/style.css" />
+    </head>
+    <body>
+        <div id="app" v-cloak>
+            <div v-if="visibleOne || visible" class="outside" @click="away()"></div>
+            <div class="container">
+                <div class="calculator-wrapper">
+                    <div v-if="loading" class="loader">loading.....</div>
+                    <div v-else class="calculator-inner">
+                        <div class="calculators">
+                            <div class="calculator">
+                                <div class="input-group">
+                                    <div class="input-label">
+                                        <label for="loan-amount">Total Loan Amount</label>
+                                    </div>
+                                    <div class="input-controll">
+                                        <div class="loan-amount">
+                                            <cleave
+                                                v-model="loanAmount"
+                                                @keyup="collateralCal"
+                                                :class="errorClass"
+                                                :options="number"
+                                                id="loanInput"
+                                                class="loanInput"
+                                            ></cleave>
+                                        </div>
+                                        <div class="input-select" @click="toggleSelectedOne">
+                                            <div class="select-option">
+                                                <figure>
+                                                    <img
+                                                        v-if="selectedCoinsA"
+                                                        :src="selectedCoinsA.logo_url"
+                                                        alt="currency"
+                                                    />
+                                                </figure>
+                                                <p v-if="selectedCoinsA">{{ selectedCoinsA.currency }}</p>
+                                            </div>
+                                            <div class="select-icon">
+                                                <svg
+                                                    height="20"
+                                                    width="20"
+                                                    viewBox="0 0 20 20"
+                                                    aria-hidden="true"
+                                                    focusable="false"
+                                                    class="css-8mmkcg"
+                                                >
+                                                    <path
+                                                        d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                                                    ></path>
+                                                </svg>
+                                            </div>
+                                            <div class="select-list" :class="{visible: visibleOne}">
+                                                <ul>
+                                                    <li
+                                                        v-for="(currency, i) in currencyListsA"
+                                                        :key="i"
+                                                        @click="selectionValueOne(currency)"
+                                                    >
+                                                        <img :src="currency.logo_url" alt="currency" />
+                                                        <span> {{ currency.currency }}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span v-if="errorMsg">{{errorMsg}}</span>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">
+                                        <label for="loan-amount">Collateral</label>
+                                    </div>
+                                    <div class="input-controll">
+                                        <div class="collateral-amount">
+                                            <input type="number" v-model="collateral" @input="loanAmountCal" />
+                                        </div>
+                                        <div class="input-select" @click="toggleSelected">
+                                            <div class="select-option">
+                                                <figure>
+                                                    <img
+                                                        v-if="selectedCoins"
+                                                        :src="selectedCoins.logo_url"
+                                                        alt="currency"
+                                                    />
+                                                </figure>
+                                                <p v-if="selectedCoins">{{ selectedCoins.currency }}</p>
+                                            </div>
+                                            <div class="select-icon">
+                                                <svg
+                                                    height="20"
+                                                    width="20"
+                                                    viewBox="0 0 20 20"
+                                                    aria-hidden="true"
+                                                    focusable="false"
+                                                    class="css-8mmkcg"
+                                                >
+                                                    <path
+                                                        d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                                                    ></path>
+                                                </svg>
+                                            </div>
+                                            <div class="select-list" :class="{visible: visible}">
+                                                <ul>
+                                                    <li
+                                                        v-for="(currency, i) in currencyLists"
+                                                        :key="i"
+                                                        @click="selectionValue(currency)"
+                                                    >
+                                                        <img :src="currency.logo_url" alt="currency" />
+                                                        <span> {{ currency.currency }}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-label">
+                                        <label>Collateral</label>
+                                    </div>
+                                    <div class="input-controll">
+                                        <div class="interest-rate">
+                                            <div class="interests">
+                                                <div class="interest" v-if="lowRisk || moderateRisk || highRisk">
+                                                    <input
+                                                        type="radio"
+                                                        id="one"
+                                                        name="interest"
+                                                        v-model="interest"
+                                                        value="0.25"
+                                                        @change="collateralCal"
+                                                    />
+                                                    <label for="one"> 1% </label>
+                                                </div>
+                                                <div class="interest" v-if="lowRisk || moderateRisk && !highRisk">
+                                                    <input
+                                                        type="radio"
+                                                        id="two"
+                                                        name="interest"
+                                                        v-model="interest"
+                                                        value="0.33"
+                                                        @change="collateralCal"
+                                                    />
+                                                    <label for="two"> 6.95% </label>
+                                                </div>
+                                                <div class="interest" v-if="lowRisk && !moderateRisk && !highRisk">
+                                                    <input
+                                                        type="radio"
+                                                        id="three"
+                                                        name="interest"
+                                                        v-model="interest"
+                                                        value="0.50"
+                                                        @change="collateralCal"
+                                                    />
+                                                    <label for="three"> 8.95% </label>
+                                                </div>
+                                            </div>
+                                            <div class="interests percentage">
+                                                <p v-if="lowRisk || moderateRisk || highRisk">25% LTV</p>
+                                                <p v-if="lowRisk || moderateRisk && !highRisk">33% LTV</p>
+                                                <p v-if="lowRisk && !moderateRisk && !highRisk">50% LTV</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="subtitle">Loan Term</h3>
+                                <div class="month-slider-range">
+                                    <div class="month-range">
+                                        <input
+                                            type="radio"
+                                            id="6"
+                                            name="month"
+                                            v-model="month"
+                                            @change="totalInterestCal"
+                                            value="6"
+                                        />
+                                        <label for="6"> 6mo </label>
+                                    </div>
+                                    <div class="month-range">
+                                        <input
+                                            type="radio"
+                                            id="12"
+                                            name="month"
+                                            v-model="month"
+                                            @change="totalInterestCal"
+                                            value="12"
+                                        />
+                                        <label for="12"> 12mo </label>
+                                    </div>
+                                    <div class="month-range">
+                                        <input
+                                            type="radio"
+                                            id="24"
+                                            name="month"
+                                            v-model="month"
+                                            @change="totalInterestCal"
+                                            value="24"
+                                        />
+                                        <label for="24"> 24mo </label>
+                                    </div>
+                                    <div class="month-range">
+                                        <input
+                                            type="radio"
+                                            id="36"
+                                            name="month"
+                                            v-model="month"
+                                            @change="totalInterestCal"
+                                            value="36"
+                                        />
+                                        <label for="36"> 36mo </label>
+                                    </div>
+                                    <div class="month-range">
+                                        <input
+                                            type="radio"
+                                            id="48"
+                                            name="month"
+                                            v-model="month"
+                                            @change="totalInterestCal"
+                                            value="48"
+                                        />
+                                        <label for="48"> 48mo </label>
+                                    </div>
+                                    <div class="month-range">
+                                        <input
+                                            type="radio"
+                                            id="60"
+                                            name="month"
+                                            v-model="month"
+                                            @change="totalInterestCal"
+                                            value="60"
+                                        />
+                                        <label for="60"> 60mo </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calculator-results">
+                            <h3>Total Loan</h3>
+                            <span class="total-loan">$<span>{{separateAtThousands(loanAmount)}}</span></span>
+                            <div class="resutls-interest">
+                                <div class="monthly-interest">
+                                    <h3>Monthly Interest</h3>
+                                    <span>${{separateAtThousands(monthlyInterest)}}</span>
+                                </div>
+                                <div class="monthly-interest">
+                                    <h3>Total Interest</h3>
+                                    <span>${{separateAtThousands(totalInterest)}}</span>
+                                </div>
+                            </div>
+                            <p>
+                                Celsius loans are not available in all locations. Check your Celsius mobile app to see
+                                if you live in an area where such loans are offered. Additional limits may apply in
+                                certain jurisdictions.
+                            </p>
+                            <p>
+                                Interest payments are made on a monthly basis, principal amount returned at the end of
+                                the loan term. Interest rates vary depending on your choice of LTV (Loan to Value).
+                                Minimum loan term is 6 months. If you repay your loan prior to the lapse of 6 months,
+                                you will be charged with the interest payable for the first full 6 months. Celsius’
+                                Terms of Use apply.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <script src="./src/js/vue.global.js"></script> -->
+        <script src="./src/js/vue.global.prod.min.js"></script>
+        <script src="./src/js/cleave.js@1"></script>
+        <script src="./src/js/vue-cleave-component@3.js"></script>
+
+        <script src="./src/js/app.js"></script>
+    </body>
+</html>
