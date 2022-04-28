@@ -116,9 +116,7 @@ let calculator = Vue.createApp({
             let url = `https://api.nomics.com/v1/currencies/ticker?key=bd203c06a2629074324aa986b5922a46473ac557&ids=${ids}`;
             await fetch(url, {
                 mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                method: "GET",
             })
                 .then((res) => res.json())
                 .then((data) => {
