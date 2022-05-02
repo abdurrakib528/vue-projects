@@ -3,7 +3,7 @@ let calculator = Vue.createApp({
     data() {
         return {
             loading: false,
-            loanAmount: "100.00",
+            loanAmount: "100",
             currencyListsA: [],
             currencyLists: [],
             interest: "0.25",
@@ -60,7 +60,6 @@ let calculator = Vue.createApp({
                 "matic",
                 "sga",
                 "sgr",
-                "shib",
                 "snx",
                 "sol",
                 "sushi",
@@ -86,19 +85,16 @@ let calculator = Vue.createApp({
             },
         };
     },
-    async mounted() {
-        await this.fetchCoinA();
-        await this.fetchCoin();
+    created() {
+        this.fetchCoinA();
+        this.fetchCoin();
         let gun = Math.ceil(Math.round(this.loanAmount / this.interest));
         this.collateral = (gun / this.selectedCoinsPrice).toFixed(4);
 
         // Interest Calculations*******
         this.monthlyInterest = ((this.loanAmount * (1 / 100) * 1) / 12).toFixed(2);
         this.totalInterest = this.roundFloat(this.month * this.monthlyInterest, 1).toFixed(2);
-
-        let numInput = document.querySelector(".total-loan span");
-
-        numInput.textContent = numInput.innerHTML.slice(0, 3);
+        console.log("not works");
     },
     methods: {
         roundFloat(num, decimalPlaces) {
@@ -112,109 +108,119 @@ let calculator = Vue.createApp({
         },
         async fetchCoinA() {
             this.loading = true;
-            let ids = "BUSD,TUSD,USD,USDC,USDT";
-            let cors_api_url = "https://cors-anywhere.herokuapp.com/";
-            let url = `https://api.nomics.com/v1/currencies/ticker?key=bd203c06a2629074324aa986b5922a46473ac557&ids=${ids}&interval=1d`;
-            await fetch(cors_api_url + url)
+            let ids = "binance-usd,true-usd,usd,usd-coin,tether";
+            // let cors_api_url = "https://cors.eu.org/";
+
+            let url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}`;
+            fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
                     this.currencyListsA = data;
                     let usd = {
-                        id: "USD",
-                        currency: "USD",
-                        logo_url: "//www.freeiconspng.com/uploads/dollar-black-circle-icon-28.png",
-                        price: "1.00137539",
+                        id: "usd",
+                        symbol: "USD",
+                        image: "//www.freeiconspng.com/uploads/dollar-black-circle-icon-28.png",
+                        current_price: "1.00137539",
                     };
                     this.currencyListsA.push(usd);
+                    this.selectedCoinsA = data[1];
                     this.currencyListsA.sort(function (a, b) {
-                        var textA = a.currency.toUpperCase();
-                        var textB = b.currency.toUpperCase();
+                        var textA = a.symbol.toUpperCase();
+                        var textB = b.symbol.toUpperCase();
                         return textA < textB ? -1 : textA > textB ? 1 : 0;
                     });
                     this.loading = false;
-                    this.selectedCoinsA = {...data[1]};
+                })
+                .catch((err) => {
+                    alert("You sent too many request!");
                 });
         },
         async fetchCoin() {
             this.loading = true;
             let ids = [
-                "1INCH",
-                "AAVE",
-                "ADA",
-                "AVAX",
-                "BAT",
-                "BCH",
-                "BNB",
-                "BTC",
-                "BTG",
-                "BUSD",
-                "COMP",
-                "DASH",
-                "DOGE",
-                "DOT",
-                "EOS",
-                "ETH",
-                "KNC",
-                "LINK",
-                "LPT",
-                "LTC",
-                "LUNA",
-                "MANA",
-                "MATIC",
-                "OMG",
-                "PAXG",
-                "SHIB",
-                "SNX",
-                "SOL",
-                "SUSHI",
-                "TUSD",
-                "UMA",
-                "UNI",
-                "USD",
-                "USDC",
-                "USDT",
-                "WBTC",
-                "XLM",
-                "XRP",
-                "XTZ",
-                "ZEC",
-                "ZRX",
+                "1inch",
+                "aave",
+                "cardano",
+                "avalanche-2",
+                "basic-attention-token",
+                "bitcoin-cash",
+                "binancecoin",
+                "bitcoin",
+                "bitcoin-gold",
+                "binance-usd",
+                // "COMP",
+                "dash",
+                "dogecoin",
+                "polkadot",
+                "eos",
+                "ethereum",
+                "kyber-network-crystal",
+                "chainlink",
+                "livepeer",
+                "litecoin",
+                "terra-luna",
+                "decentraland",
+                "matic-network",
+                "omisego",
+                "pax-gold",
+                "havven",
+                "solana",
+                "sushi",
+                "true-usd",
+                "uma",
+                "uniswap",
+                "usd-coin",
+                "tether",
+                "wrapped-bitcoin",
+                "stellar",
+                "ripple",
+                "tezos",
+                "zcash",
+                "0x",
             ];
-            let cors_api_url = "https://cors-anywhere.herokuapp.com/";
-            let url = `https://api.nomics.com/v1/currencies/ticker?key=bd203c06a2629074324aa986b5922a46473ac557&ids=${ids}&interval=1d`;
-            await fetch(cors_api_url + url)
+            // let cors_api_url = "https://cors.eu.org/";
+            let url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&per_page=500`;
+            fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
                     this.currencyLists = data;
-                    this.loading = false;
                     this.currencyLists.sort(function (a, b) {
-                        var textA = a.currency.toUpperCase();
-                        var textB = b.currency.toUpperCase();
+                        var textA = a.symbol.toUpperCase();
+                        var textB = b.symbol.toUpperCase();
                         return textA < textB ? -1 : textA > textB ? 1 : 0;
                     });
-                    this.selectedCoins = {...data[7]};
-                    this.selectedCoinsPrice = data[7].price;
+                    this.selectedCoins = data[7];
+                    this.selectedCoinsPrice = data[7].current_price;
+
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    alert("You sent too many request!");
                 });
         },
 
+        collateralCalFromLoan(e) {
+            let gun = Math.floor(Math.round(this.loanAmount / this.interest));
+            this.collateral = (gun / Number(this.selectedCoinsPrice).toFixed(2)).toFixed(4);
+            (1 / 12 / 100) * 100;
+        },
         collateralCal(e) {
             let gun = Math.floor(Math.round(this.loanAmount / this.interest));
             this.collateral = (gun / Number(this.selectedCoinsPrice).toFixed(2)).toFixed(4);
-            // clearTimeout(this.timer);
-            // this.timer = setTimeout(() => {
-            //     if (e.target.value.indexOf(".") === -1 && e.target.value.length > 2) {
-            //         e.target.value = e.target.value + ".00";
-            //         console.log(e.target);
-            //     }
-            // }, 1000);
+            (1 / 12 / 100) * 100;
+        },
+        collateralCalInter(e) {
+            let interest = e.target.getAttribute("data-rate");
+            this.monthlyInterest = ((interest / 12 / 100) * this.loanAmount).toFixed(2);
+            this.totalInterest = Math.ceil(this.monthlyInterest * this.month).toFixed(2);
         },
         selectionValue(item) {
-            this.selectedCoins = {...item};
-            this.selectedCoinsPrice = item.price;
+            this.selectedCoins = item;
+            this.selectedCoinsPrice = item.current_price;
         },
         selectionValueOne(item) {
             this.selectedCoinsA = {...item};
-            if (this.selectedCoinsA.currency === "USD" && this.loanAmount < 1000) {
+            if (this.selectedCoinsA.symbol === "USD" && this.loanAmount < 1000) {
                 this.errorMsg = "USD minimum: $1000";
                 this.errorClass = "input-error";
             } else if (this.loanAmount < 100) {
@@ -265,10 +271,10 @@ let calculator = Vue.createApp({
         loanAmount(newValue) {
             this.monthlyInterest = ((newValue * (1 / 100) * 1) / 12).toFixed(2);
             this.totalInterest = this.roundFloat(this.month * this.monthlyInterest, 1).toFixed(2);
-            if (newValue < 100 && this.selectedCoinsA.currency !== "USD") {
+            if (newValue < 100 && this.selectedCoinsA.symbol !== "USD") {
                 this.errorMsg = "Stablecoin minimum: $100.00";
                 this.errorClass = "input-error";
-            } else if (this.selectedCoinsA.currency === "USD" && newValue < 1000) {
+            } else if (this.selectedCoinsA.symbol === "USD" && newValue < 1000) {
                 this.errorMsg = "USD minimum: $1000";
                 this.errorClass = "input-error";
             } else {
@@ -278,16 +284,16 @@ let calculator = Vue.createApp({
         },
         selectedCoins(newValue) {
             let moderateRisk = this.moderateRiskCoins.some((item) => {
-                return newValue.currency.toLowerCase() == item;
+                return newValue.symbol.toLowerCase() == item;
             });
             moderateRisk ? (this.moderateRisk = true) : (this.moderateRisk = false);
             let lowRisk = this.lowRiskCoins.some((item) => {
-                return newValue.currency.toLowerCase() == item;
+                return newValue.symbol.toLowerCase() == item;
             });
             lowRisk ? (this.lowRisk = true) : (this.lowRisk = false);
 
             let highRisk = this.highRiskCoins.some((item) => {
-                return newValue.currency.toLowerCase() == item;
+                return newValue.symbol.toLowerCase() == item;
             });
             highRisk ? (this.highRisk = true) : (this.highRisk = false);
         },

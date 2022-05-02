@@ -27,7 +27,7 @@
                                         <div class="loan-amount">
                                             <cleave
                                                 v-model="loanAmount"
-                                                @keyup="collateralCal"
+                                                @keyup="collateralCalFromLoan"
                                                 :class="errorClass"
                                                 :options="number"
                                                 id="loanInput"
@@ -39,11 +39,11 @@
                                                 <figure>
                                                     <img
                                                         v-if="selectedCoinsA"
-                                                        :src="selectedCoinsA.logo_url"
+                                                        :src="selectedCoinsA.image"
                                                         alt="currency"
                                                     />
                                                 </figure>
-                                                <p v-if="selectedCoinsA">{{ selectedCoinsA.currency }}</p>
+                                                <p v-if="selectedCoinsA">{{ selectedCoinsA.symbol }}</p>
                                             </div>
                                             <div class="select-icon">
                                                 <svg
@@ -66,8 +66,8 @@
                                                         :key="i"
                                                         @click="selectionValueOne(currency)"
                                                     >
-                                                        <img :src="currency.logo_url" alt="currency" />
-                                                        <span> {{ currency.currency }}</span>
+                                                        <img :src="currency.image" alt="currency" />
+                                                        <span> {{ currency.symbol }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -88,11 +88,11 @@
                                                 <figure>
                                                     <img
                                                         v-if="selectedCoins"
-                                                        :src="selectedCoins.logo_url"
+                                                        :src="selectedCoins.image"
                                                         alt="currency"
                                                     />
                                                 </figure>
-                                                <p v-if="selectedCoins">{{ selectedCoins.currency }}</p>
+                                                <p v-if="selectedCoins">{{ selectedCoins.symbol }}</p>
                                             </div>
                                             <div class="select-icon">
                                                 <svg
@@ -115,8 +115,8 @@
                                                         :key="i"
                                                         @click="selectionValue(currency)"
                                                     >
-                                                        <img :src="currency.logo_url" alt="currency" />
-                                                        <span> {{ currency.currency }}</span>
+                                                        <img :src="currency.image" alt="currency" />
+                                                        <span> {{ currency.symbol }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -125,7 +125,7 @@
                                 </div>
                                 <div class="input-group">
                                     <div class="input-label">
-                                        <label>Collateral</label>
+                                        <label>Interest Rate</label>
                                     </div>
                                     <div class="input-controll">
                                         <div class="interest-rate">
@@ -137,6 +137,8 @@
                                                         name="interest"
                                                         v-model="interest"
                                                         value="0.25"
+                                                        data-rate="1"
+                                                        @input="collateralCalInter"
                                                         @change="collateralCal"
                                                     />
                                                     <label for="one"> 1% </label>
@@ -148,9 +150,11 @@
                                                         name="interest"
                                                         v-model="interest"
                                                         value="0.33"
+                                                        data-rate="6"
+                                                        @input="collateralCalInter"
                                                         @change="collateralCal"
                                                     />
-                                                    <label for="two"> 6.95% </label>
+                                                    <label for="two"> 6% </label>
                                                 </div>
                                                 <div class="interest" v-if="lowRisk && !moderateRisk && !highRisk">
                                                     <input
@@ -159,9 +163,11 @@
                                                         name="interest"
                                                         v-model="interest"
                                                         value="0.50"
+                                                        @input="collateralCalInter"
                                                         @change="collateralCal"
+                                                        data-rate="8"
                                                     />
-                                                    <label for="three"> 8.95% </label>
+                                                    <label for="three"> 8% </label>
                                                 </div>
                                             </div>
                                             <div class="interests percentage">
@@ -245,29 +251,22 @@
                             </div>
                         </div>
                         <div class="calculator-results">
-                            <h3>Total Loan</h3>
+                            <h3 class="total-loan-title">Total Loan</h3>
                             <span class="total-loan">$<span>{{separateAtThousands(loanAmount)}}</span></span>
                             <div class="resutls-interest">
                                 <div class="monthly-interest">
-                                    <h3>Monthly Interest</h3>
+                                    <h3 class="interest-title">Monthly Interest</h3>
                                     <span>${{separateAtThousands(monthlyInterest)}}</span>
                                 </div>
                                 <div class="monthly-interest">
-                                    <h3>Total Interest</h3>
+                                    <h3 class="interest-title">Total Interest</h3>
                                     <span>${{separateAtThousands(totalInterest)}}</span>
                                 </div>
                             </div>
                             <p>
-                                Celsius loans are not available in all locations. Check your Celsius mobile app to see
-                                if you live in an area where such loans are offered. Additional limits may apply in
-                                certain jurisdictions.
-                            </p>
-                            <p>
-                                Interest payments are made on a monthly basis, principal amount returned at the end of
-                                the loan term. Interest rates vary depending on your choice of LTV (Loan to Value).
-                                Minimum loan term is 6 months. If you repay your loan prior to the lapse of 6 months,
-                                you will be charged with the interest payable for the first full 6 months. Celsius’
-                                Terms of Use apply.
+                                Interest payments are made on a maturity, principal amount returned at the end of the
+                                loan term. Interest rates vary depending on your choice of LTV (Loan to Value). Minimum
+                                loan term is 6 months.
                             </p>
                         </div>
                     </div>

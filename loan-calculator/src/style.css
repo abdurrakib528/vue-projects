@@ -18,11 +18,31 @@ body {
 }
 .container {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
-
 [v-cloak] {
     display: none;
 }
+
+.elementor-editor-active .elementor-shortcode {
+    position: relative;
+}
+.elementor-editor-active .elementor-shortcode:after {
+    background: #dde1e5;
+    font-size: 22px;
+    display: block;
+    text-align: center;
+    color: #c2cbd2;
+    padding: 20px 0px;
+    width: 100%;
+    content: "Loan Calculator";
+}
+
+/* [data-widget_type="shortcode.default"] {background-color: gray !important;min-height: 100px;} */
 input {
     font: inherit;
     color: inherit;
@@ -43,15 +63,15 @@ img {
 .calculator-wrapper input[type="number"] {
     -moz-appearance: textfield;
 }
-.calculator-wrapper {
+/* .calculator-wrapper {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     margin: 5rem 0;
     overflow: hidden;
     min-height: 60vh;
+} */
+
+.calculator-wrapper {
+    min-height: 100px;
 }
 .loader {
     width: 100%;
@@ -177,6 +197,14 @@ img {
     align-items: center;
     gap: 2rem;
 }
+.select-option p {
+    margin-bottom: 0px;
+    text-transform: uppercase;
+}
+.select-icon {
+    display: block;
+    line-height: 1;
+}
 .select-list {
     position: absolute;
     left: 0px;
@@ -200,6 +228,8 @@ img {
 }
 .select-list ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .select-list li {
@@ -213,6 +243,7 @@ img {
 .select-list li span {
     color: #fff;
     font-size: 1.6rem;
+    text-transform: uppercase;
 }
 .select-list li img {
     max-width: 2.5rem;
@@ -253,6 +284,7 @@ img {
     width: 10rem;
     color: gray;
     font-weight: 400;
+    margin-bottom: 0;
 }
 .interest label {
     display: block;
@@ -260,7 +292,7 @@ img {
     text-align: center;
     margin: 0;
     margin-left: 1rem;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 30rem;
     cursor: pointer;
     transition: all 0.3s;
@@ -285,6 +317,7 @@ img {
     font-size: 1.6rem;
     font-weight: 400;
     margin-bottom: 2rem;
+    color: #fff;
 }
 .month-range {
     background: gray;
@@ -333,21 +366,30 @@ img {
 
 /* Resutls ====/ */
 .calculator-results {
-    background: #710bc2;
+    background: #2a2727;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: left;
 }
-.calculator-results h3 {
-    font-size: 2rem;
+.interest-title {
+    font-size: 20px;
     margin-bottom: 1.5rem;
+    color: #f5f5f5;
+}
+
+.total-loan-title {
+    font-size: 20px;
+    margin-bottom: 1.5rem;
+    color: #f5f5f5;
 }
 .calculator-results p {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 500;
     margin-top: 1rem;
     line-height: 1.5;
+    margin-bottom: 0;
+    color: #f5f5f5;
 }
 span.total-loan {
     font-size: 6rem;
@@ -381,12 +423,9 @@ span.total-loan {
     }
 }
 @media screen and (max-width: 768px) {
-    .calculator-inner > * {
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-    }
-    .interests {
-        width: max-content;
+    .interests label,
+    .percentage p {
+        width: 7rem;
     }
     .month-range label {
         font-size: 1.2rem;
@@ -394,5 +433,20 @@ span.total-loan {
 
     .month-range {
         width: 5rem;
+    }
+    .calculator-inner > * {
+        padding: 2rem;
+    }
+    .resutls-interest {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .monthly-interest:nth-child(1) {
+        margin-bottom: 2rem;
+    }
+    span.total-loan,
+    .monthly-interest span {
+        font-size: 2.5rem;
     }
 }
